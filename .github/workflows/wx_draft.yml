@@ -44,4 +44,4 @@ jobs:
           # 封面图路径（如果仓库根目录有1.jpg，无需改）
           WX_COVER_IMAGE: "1.jpg"
         run: |
-          python your_script_name.py  # 替换成你的Python脚本文件名（比如wx_draft.py）
+          python push.py  # 替换成你的Python脚本文件名（比如wx_draft.py）
