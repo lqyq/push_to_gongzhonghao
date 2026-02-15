@@ -1,0 +1,47 @@
+name: 自动上传微信公众号草稿箱
+
+# 触发规则：可选（按需选择）
+on:
+  # 1. 手动触发（推荐，可在GitHub页面点击运行）
+  workflow_dispatch:
+  # 2. 代码推送到main分支时触发（可选）
+  # push:
+  #   branches: [ main ]
+  # 3. 定时触发（比如每天9点运行，时区UTC，北京时间+8，所以写1点）
+  # schedule:
+  #   - cron: '0 1 * * *'
+
+# 运行权限
+permissions:
+  contents: read
+
+jobs:
+  upload-wx-draft:
+    runs-on: ubuntu-latest  # 使用Ubuntu系统运行
+    steps:
+      # 步骤1：拉取仓库代码
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      # 步骤2：设置Python环境
+      - name: 设置Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'  # 指定Python版本，兼容即可
+
+      # 步骤3：安装依赖
+      - name: 安装依赖包
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      # 步骤4：运行Python代码（核心步骤）
+      - name: 执行上传草稿箱脚本
+        env:
+          # 从GitHub Secrets读取敏感配置（需提前在仓库设置）
+          WX_APP_ID: ${{ secrets.WX_APP_ID }}
+          WX_APP_SECRET: ${{ secrets.WX_APP_SECRET }}
+          # 封面图路径（如果仓库根目录有1.jpg，无需改）
+          WX_COVER_IMAGE: "1.jpg"
+        run: |
+          python your_script_name.py  # 替换成你的Python脚本文件名（比如wx_draft.py）
